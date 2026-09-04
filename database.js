@@ -2,13 +2,14 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 
-const dataDir = path.join(process.cwd(), "data");
+const DATA_DIR =
+  process.env.RAILWAY_VOLUME_MOUNT_PATH || path.join(process.cwd(), "data");
 
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir);
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-const db = new Database(path.join(dataDir, "kitnaPadha.db"));
+const db = new Database(path.join(DATA_DIR, "kitnapadha.db"));
 
 /*
 users
