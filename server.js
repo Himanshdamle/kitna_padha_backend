@@ -17,13 +17,10 @@ import db from "./database.js";
 const app = express();
 
 const PORT = 3000;
-
-const EXTENSION_ORIGIN = "chrome-extension://fpijhaaohpdmhnpnjbefghmhbbfjiaob";
 const PW = "https://www.pw.live";
 
 const allowedOrigins = [
   `https://kitnapadhabackend-production.up.railway.app`,
-  EXTENSION_ORIGIN,
   PW,
 ];
 
@@ -49,9 +46,11 @@ if (process.env.NODE_ENV === "production" && !process.env.JWT_SECRET) {
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Requests without an Origin header
-      // such as curl/Postman/server-side requests.
       if (!origin) {
+        return callback(null, true);
+      }
+
+      if (origin.startsWith("chrome-extension://")) {
         return callback(null, true);
       }
 
@@ -1018,5 +1017,5 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Kitna Padha backend running on http://localhost:${PORT}`);
+  console.log(`Kitna Padha backend running!`);
 });
