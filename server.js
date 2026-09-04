@@ -854,7 +854,10 @@ app.get("/leaderboard/:kitnaId", authenticateToken, (req, res) => {
 // PROFILE PICTURE UPLOAD
 // ============================================================
 
-const uploadDir = path.join(process.cwd(), "uploads");
+const uploadDir = path.join(
+  process.env.RAILWAY_VOLUME_MOUNT_PATH || process.cwd(),
+  "uploads",
+);
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
