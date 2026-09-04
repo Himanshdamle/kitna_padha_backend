@@ -21,7 +21,11 @@ const PORT = 3000;
 const EXTENSION_ORIGIN = "chrome-extension://fpijhaaohpdmhnpnjbefghmhbbfjiaob";
 const PW = "https://www.pw.live";
 
-const allowedOrigins = [`http://localhost:${PORT}`, EXTENSION_ORIGIN, PW];
+const allowedOrigins = [
+  `https://kitnapadhabackend-production.up.railway.app`,
+  EXTENSION_ORIGIN,
+  PW,
+];
 
 // ------------------------------------------------------------
 // JWT SECRET
