@@ -18,7 +18,7 @@ const app = express();
 
 const PORT = 3000;
 
-const EXTENSION_ORIGIN = "chrome-extension://fmeianhcpnmmognmcgcjkikbjafgjkkk";
+const EXTENSION_ORIGIN = "chrome-extension://fpijhaaohpdmhnpnjbefghmhbbfjiaob";
 const PW = "https://www.pw.live";
 
 const allowedOrigins = [`http://localhost:${PORT}`, EXTENSION_ORIGIN, PW];
