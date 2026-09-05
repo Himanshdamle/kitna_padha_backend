@@ -720,7 +720,7 @@ app.patch("/users/:kitnaId/profile", authenticateToken, (req, res) => {
           SET
             thoughts = ?,
             exams = ?,
-            targeting = ?
+            targeting = ?,
             display_name = ?
           WHERE id = ?
           `,
@@ -896,7 +896,6 @@ app.use("/uploads", express.static(uploadDir));
 // ------------------------------------------------------------
 // Upload route
 // ------------------------------------------------------------
-
 app.patch(
   "/users/:kitnaId/pfp",
 
