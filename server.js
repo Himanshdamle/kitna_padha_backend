@@ -711,7 +711,7 @@ app.patch("/users/:kitnaId/profile", authenticateToken, (req, res) => {
   try {
     const userId = req.user.userId;
 
-    const { thoughts, exams, targeting } = req.body;
+    const { thoughts, exams, targeting, display_name } = req.body;
 
     const result = db
       .prepare(
@@ -721,10 +721,11 @@ app.patch("/users/:kitnaId/profile", authenticateToken, (req, res) => {
             thoughts = ?,
             exams = ?,
             targeting = ?
+            display_name = ?
           WHERE id = ?
           `,
       )
-      .run(thoughts, exams, targeting, userId);
+      .run(thoughts, exams, targeting, display_name, userId);
 
     if (result.changes === 0) {
       return res.status(404).json({

@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Environment variables & secrets
+.env
+
+# Local database
+data/kitnapadha.db
+*.db
+
+# User uploads
+uploads/
+
+# OS / Editor clutter
+.DS_Store
+*.log
+.vscode/

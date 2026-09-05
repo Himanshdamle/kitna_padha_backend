@@ -85,10 +85,4 @@ db.prepare(
 `,
 ).run();
 
-// db.prepare(`DROP TABLE friend_requests`).run();
-// db.prepare(`DROP TABLE users`).run();
-
-const allUsersStatement = db.prepare("SELECT * FROM users").all();
-console.log(allUsersStatement);
-
 export default db;
