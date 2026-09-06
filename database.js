@@ -85,4 +85,20 @@ db.prepare(
 `,
 ).run();
 
+db.prepare(
+  `
+  CREATE TABLE IF NOT EXISTS pw_presence (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER UNIQUE NOT NULL,
+    last_seen TEXT NOT NULL,
+    online INTEGER NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )
+`,
+).run();
+
+const rows = db.prepare("SELECT * FROM pw_presence").all();
+console.log(rows);
+
 export default db;

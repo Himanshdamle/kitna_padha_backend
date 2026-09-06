@@ -671,27 +671,43 @@ app.get("/friends/:kitnaId", authenticateToken, (req, res) => {
     const friends = db
       .prepare(
         `
-          SELECT
-            u.id,
-            u.kitna_id,
-            u.username,
-            u.weekly_xp,
-            u.pfp,
-            u.display_name
-          FROM friend_requests fr
-          JOIN users u
-            ON u.id = CASE
-              WHEN fr.sender_id = ?
-                THEN fr.receiver_id
-              ELSE fr.sender_id
-            END
-          WHERE
-            (fr.sender_id = ?
-              OR fr.receiver_id = ?)
-            AND fr.status = 'accepted'
-          `,
+    SELECT
+        u.id,
+        u.kitna_id,
+        u.username,
+        u.weekly_xp,
+        u.pfp,
+        u.display_name,
+        pp.last_seen,
+
+        CASE
+            WHEN pp.online = 1
+                 AND datetime(pp.last_seen) > datetime('now', '-60 seconds')
+            THEN true
+            ELSE false
+        END AS pw_online
+
+    FROM friend_requests fr
+
+    JOIN users u
+        ON u.id = CASE
+            WHEN fr.sender_id = ? THEN fr.receiver_id
+            ELSE fr.sender_id
+        END
+
+    LEFT JOIN pw_presence pp
+        ON pp.user_id = u.id
+
+    WHERE
+        (fr.sender_id = ? OR fr.receiver_id = ?)
+        AND fr.status = 'accepted'
+`,
       )
       .all(userId, userId, userId);
+
+    friends.forEach((friend) => {
+      friend.pw_online = Boolean(friend.pw_online);
+    });
 
     res.json(friends);
   } catch (error) {
@@ -699,6 +715,45 @@ app.get("/friends/:kitnaId", authenticateToken, (req, res) => {
 
     res.status(500).json({
       error: "Failed to load friends.",
+    });
+  }
+});
+
+// ============================================================
+// PW PRESENCE
+// ============================================================
+app.post("/presence/pw", authenticateToken, (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { online } = req.body;
+
+    if (typeof online !== "boolean") {
+      return res.status(400).json({
+        error: "online must be a boolean",
+      });
+    }
+
+    db.prepare(
+      `
+      INSERT INTO pw_presence (user_id, last_seen, online)
+      VALUES (?, ?, ?)
+      ON CONFLICT(user_id)
+      DO UPDATE SET
+        last_seen = excluded.last_seen,
+        online = excluded.online
+    `,
+    ).run(userId, new Date().toISOString(), online ? 1 : 0);
+
+    res.json({
+      success: true,
+    });
+
+    console.log(userId, new Date().toISOString(), online ? 1 : 0);
+  } catch (error) {
+    console.error("PW PRESENCE ERROR:", error);
+
+    res.status(500).json({
+      error: "Failed to update PW presence.",
     });
   }
 });
