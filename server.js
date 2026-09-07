@@ -677,7 +677,7 @@ app.get("/friends/:kitnaId", authenticateToken, (req, res) => {
         u.username,
         u.weekly_xp,
         u.pfp,
-        u.current_streak
+        u.current_streak,
         u.display_name,
         pp.last_seen,
 
