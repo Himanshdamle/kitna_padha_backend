@@ -724,6 +724,8 @@ app.get("/friends/:kitnaId", authenticateToken, (req, res) => {
 // ============================================================
 app.post("/presence/pw", authenticateToken, (req, res) => {
   try {
+    console.log("PW presence");
+
     const userId = req.user.userId;
     const { online } = req.body;
 
