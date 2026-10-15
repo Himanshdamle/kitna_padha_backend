@@ -20,7 +20,7 @@ const PORT = 3000;
 const PW = "https://www.pw.live";
 
 const allowedOrigins = [
-  `https://kitnapadhabackend-production.up.railway.app`,
+  `https://kitnapadhabackend-production-28e0.up.railway.app`,
   PW,
 ];
 
